@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+    app:
+      build: .
+      env_file:
+        - ./.env
+      ports:
+        - "8000:8000"
+      depends_on:
+        - mongo
+        - redis
+
+    mongo:
+      image: mongo
+      restart: always
+      environment:
+        MONGO_INITDB_ROOT_USERNAME: ${DOCKER_MONGO_ROOT_USERNAME}
+        MONGO_INITDB_ROOT_PASSWORD: ${DOCKER_MONGO_ROOT_PASSWORD}
+      ports:
+        - "27017:27017"
+      volumes:
+        - thechapterhouse-mongo-data:/data/db
+      healthcheck:
+        test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+
+
+    mongo-express:
+      image: mongo-express
+      restart: always
+      ports:
+        - 8081:8081
+      environment:
+        ME_CONFIG_MONGODB_URL: "mongodb://${DOCKER_MONGO_ROOT_USERNAME}:${DOCKER_MONGO_ROOT_PASSWORD}@mongo:27017/?authSource=admin"
+        ME_CONFIG_BASICAUTH_ENABLED: true
+        ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_EXPRESS_USERNAME}
+        ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_EXPRESS_PASSWORD}
+    
+    redis:
+      image: redis/redis-stack
+      restart: always
+      ports:
+        - "6380:6379"
+        - "8002:8001"
+      volumes:
+        - thechapterhouse-redis-data:/data
+      healthcheck:
+        test: ["CMD", "redis-cli", "ping"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+
+
+volumes:
+  thechapterhouse-mongo-data:
+  thechapterhouse-redis-data:

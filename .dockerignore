@@ -1,0 +1,9 @@
+# Ignore local dependencies
+node_modules
+
+# Ignore secret environment file
+.env
+
+# Ignore Docker files
+Dockerfile
+docker-compose.yml
