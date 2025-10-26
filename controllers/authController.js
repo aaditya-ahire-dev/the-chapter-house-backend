@@ -26,9 +26,8 @@ export async function login(req,res) {
                 throw error;
             }
         }
-        const expiresIn = 60 * 60 * 24 * 5 * 1000;
-        const sessionCookie = await admin.auth().createSessionCookie(idToken, { expiresIn });
-        const options = { maxAge: expiresIn, 
+        const sessionCookie = await admin.auth().createSessionCookie(idToken);
+        const options = {
                           httpOnly: true, 
                           sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
                           secure: process.env.NODE_ENV === 'production' ,
@@ -180,9 +179,8 @@ export async function adminLogin(req,res) {
       }
 
 
-      const expiresIn = 60 * 60 * 24 * 5 * 1000;
-      const sessionCookie = await admin.auth().createSessionCookie(idToken, { expiresIn });
-      const options = { maxAge: expiresIn, 
+      const sessionCookie = await admin.auth().createSessionCookie(idToken);
+      const options = {
                         httpOnly: true, 
                         sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
                         secure: process.env.NODE_ENV === 'production' ,
