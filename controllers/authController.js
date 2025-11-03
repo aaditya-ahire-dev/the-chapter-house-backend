@@ -26,13 +26,15 @@ export async function login(req,res) {
                 throw error;
             }
         }
-        const sessionCookie = await admin.auth().createSessionCookie(idToken);
-        const options = {
-                          httpOnly: true, 
-                          sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
-                          secure: process.env.NODE_ENV === 'production' ,
-                          path:"/"
-                        };
+        const expiresIn = 60 * 60 * 24 * 14 * 1000;
+        const sessionCookie = await admin.auth().createSessionCookie(idToken, { expiresIn });
+        const options = { 
+          httpOnly: true, 
+          sameSite: 'None', 
+          secure: true,     
+          path:"/",
+          maxAge: expiresIn,
+       };
         await redis.set(`user:email:${decodedToken.email}`,JSON.stringify(existingUser))
         res.cookie('session', sessionCookie, options);
         res.status(200).json({ message: 'Successfully logged in'  , success:true});
@@ -179,13 +181,15 @@ export async function adminLogin(req,res) {
       }
 
 
-      const sessionCookie = await admin.auth().createSessionCookie(idToken);
-      const options = {
-                        httpOnly: true, 
-                        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
-                        secure: process.env.NODE_ENV === 'production' ,
-                        path:"/"
-                      };
+      const expiresIn = 60 * 60 * 24 * 14 * 1000;
+      const sessionCookie = await admin.auth().createSessionCookie(idToken, { expiresIn });
+        const options = { 
+          httpOnly: true, 
+          sameSite: 'None', 
+          secure: true,     
+          path:"/",
+          maxAge: expiresIn,
+       };
       await redis.set(`user:email:${decodedToken.email}`,JSON.stringify(existingUser))
       res.cookie('session', sessionCookie, options);
       res.status(200).json({ message: 'Successfully logged in'  , success:true});

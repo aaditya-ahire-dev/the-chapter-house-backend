@@ -34,7 +34,7 @@ router.get("/buybook/:id",checkAuth, buyBook)
 router.get("/buybookbyid/:id",checkAuth, getBuyedBookById)
 router.get("/usersallbook",checkAuth, getUsersAllBooks)
 router.get("/getrating/:id",checkAuth, getRatingDoneByUserToSpecificBook)
-router.get("/downloadbook/:id",checkAuth, downloadBook)
+router.get("/downloadbook/:id", downloadBook)
 router.get("/getlength",checkAuth, getbooksAnduserLength)
 
 router.post("/uploadbook",upload.fields([{ name: 'coverImage', maxCount: 1 },{ name: 'fileUrl', maxCount: 1 }]), uploadBook)

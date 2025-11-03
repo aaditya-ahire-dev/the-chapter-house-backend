@@ -103,3 +103,5 @@ export async function deleteImage(publicId) {
     throw error;
   }
 }
+
+export default cloudinary;

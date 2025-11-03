@@ -5,6 +5,7 @@ import redis from '../services/redisServices.js';
 import { uploadImage } from "../services/cloudinaryService.js"
 import {deleteFolders} from "../services/redisServices.js"
 
+
 export async function getAllbooks(req,res) {
     try {
 
@@ -361,6 +362,7 @@ export async function getRatingDoneByUserToSpecificBook(req,res) {
 
 export async function downloadBook(req,res) {
     try {
+        const bookId = req.params.id;
         const book = await Book.findOne({_id:bookId})
 
          const fileUrl = book.fileUrl; 
